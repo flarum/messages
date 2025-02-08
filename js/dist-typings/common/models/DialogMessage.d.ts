@@ -10,4 +10,5 @@ export default class DialogMessage extends Model {
     createdAt(): Date;
     dialog(): false | Dialog;
     user(): false | User;
+    canDelete(): boolean;
 }

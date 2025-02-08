@@ -36,4 +36,8 @@ export default class DialogMessage extends Model {
   user() {
     return Model.hasOne<User>('user').call(this);
   }
+
+  canDelete() {
+    return Model.attribute<boolean>('canDelete').call(this);
+  }
 }

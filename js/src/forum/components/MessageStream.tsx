@@ -161,7 +161,7 @@ export default class MessageStream<CustomAttrs extends IDialogStreamAttrs = IDia
     return (
       <div className="MessageStream-item" key={index} data-id={message.id()} data-number={message.number()}>
         {this.timeGap(message)}
-        <Message message={message} />
+        <Message message={message} state={this.attrs.state} />
       </div>
     );
   }

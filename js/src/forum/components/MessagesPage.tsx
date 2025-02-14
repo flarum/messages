@@ -102,24 +102,7 @@ export default class MessagesPage<CustomAttrs extends IMessagesPageAttrs = IMess
               'MessagesPage-content--onDialog': this.currentDialogId,
             })}
           >
-            <div className="MessagesPage-sidebar" key="sidebar">
-              <div className="IndexPage-toolbar" key="toolbar">
-                <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
-                <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
-              </div>
-              <DialogList key="list" state={app.dialogs} activeDialog={this.selectedDialog()} />
-            </div>
-            {this.selectedDialog() ? (
-              <DialogSection
-                key="dialog"
-                dialog={this.selectedDialog()}
-                onback={() => {
-                  this.currentDialogId = null;
-                }}
-              />
-            ) : (
-              <LoadingIndicator key="loading" display="block" />
-            )}
+            {this.contentItems().toArray()}
           </div>
         )}
       </PageStructure>
@@ -139,6 +122,40 @@ export default class MessagesPage<CustomAttrs extends IMessagesPageAttrs = IMess
         </div>
       </header>
     );
+  }
+
+  contentItems() {
+    const items = new ItemList<Mithril.Children>();
+
+    items.add(
+      'sidebar',
+      <div className="MessagesPage-sidebar" key="sidebar">
+        <div className="IndexPage-toolbar" key="toolbar">
+          <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
+          <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
+        </div>
+        <DialogList key="list" state={app.dialogs} activeDialog={this.selectedDialog()} />
+      </div>,
+      100
+    );
+
+    items.add(
+      'dialog',
+      this.selectedDialog() ? (
+        <DialogSection
+          key="dialog"
+          dialog={this.selectedDialog()}
+          onback={() => {
+            this.currentDialogId = null;
+          }}
+        />
+      ) : (
+        <LoadingIndicator key="loading" display="block" />
+      ),
+      80
+    );
+
+    return items;
   }
 
   /**
@@ -181,7 +198,7 @@ export default class MessagesPage<CustomAttrs extends IMessagesPageAttrs = IMess
 
   /**
    * Build an item list for the part of the toolbar which is about taking action
-   * on the results. By default this is just a "mark all as read" button.
+   * on the results. By default, this is just a "mark all as read" button.
    */
   actionItems() {
     const items = new ItemList<Mithril.Children>();
